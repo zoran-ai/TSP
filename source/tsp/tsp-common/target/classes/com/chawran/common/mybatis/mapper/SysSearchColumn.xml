@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chawran.common.mybatis.mapper.SysSearchColumn">
+
+    <insert id="insertSysSearchColumn" parameterType="SysSearchColumn">
+        insert into sys_search_column
+       (column_code
+       ,search_code
+       ,column_name
+       ,column_sql
+       ,operation_symbol
+       ,element_type
+       ,ddt_code
+       ,lov_code
+       ,ds_code
+       ,display_order
+       ,description)
+        values
+       (#{column_code}
+       ,#{search_code}
+       ,#{column_name}
+       ,#{column_sql}
+       ,#{operation_symbol}
+       ,#{element_type}
+       ,#{ddt_code}
+       ,#{lov_code}
+       ,#{ds_code}
+       ,#{display_order}
+       ,#{description})
+    </insert>
+
+    <update id="updateSysSearchColumn" parameterType="SysSearchColumn">
+        update sys_search_column
+           set column_code = #{column_code}
+              ,search_code = #{search_code}
+              ,column_name = #{column_name}
+              ,column_sql = #{column_sql}
+              ,operation_symbol = #{operation_symbol}
+              ,element_type = #{element_type}
+              ,ddt_code = #{ddt_code}
+              ,lov_code = #{lov_code}
+              ,ds_code = #{ds_code}
+              ,display_order = #{display_order}
+              ,description = #{description}
+         where 1 = 1
+           and column_code = #{column_code}
+           and search_code = #{search_code}
+    </update>
+
+    <delete id="deleteSysSearchColumn" parameterType="SysSearchColumn">
+        delete
+          from sys_search_column
+         where 1 = 1
+           and column_code = #{column_code}
+           and search_code = #{search_code}
+    </delete>
+
+    <select id="selectSysSearchColumnByPk" parameterType="SysSearchColumn" resultType="SysSearchColumn">
+        select column_code
+              ,search_code
+              ,column_name
+              ,column_sql
+              ,operation_symbol
+              ,element_type
+              ,ddt_code
+              ,lov_code
+              ,ds_code
+              ,display_order
+              ,description
+          from sys_search_column
+         where 1 = 1
+           and column_code = #{column_code}
+           and search_code = #{search_code}
+    </select>
+
+</mapper>

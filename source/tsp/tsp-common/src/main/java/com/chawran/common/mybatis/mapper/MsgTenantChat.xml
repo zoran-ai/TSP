@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chawran.common.mybatis.mapper.MsgTenantChat">
+
+    <insert id="insertMsgTenantChat" parameterType="MsgTenantChat">
+        insert into msg_tenant_chat
+       (message_id
+       ,message_type
+       ,message_content
+       ,message_status
+       ,sender_id
+       ,send_date
+       ,receiver_id
+       ,receive_date
+       ,description)
+        values
+       (#{message_id}
+       ,#{message_type}
+       ,#{message_content}
+       ,#{message_status}
+       ,#{sender_id}
+       ,str_to_date(#{send_date},'%Y-%m-%d %H:%i:%s')
+       ,#{receiver_id}
+       ,str_to_date(#{receive_date},'%Y-%m-%d %H:%i:%s')
+       ,#{description})
+    </insert>
+
+    <update id="updateMsgTenantChat" parameterType="MsgTenantChat">
+        update msg_tenant_chat
+           set message_id = #{message_id}
+              ,message_type = #{message_type}
+              ,message_content = #{message_content}
+              ,message_status = #{message_status}
+              ,sender_id = #{sender_id}
+              ,send_date = str_to_date(#{send_date},'%Y-%m-%d %H:%i:%s')
+              ,receiver_id = #{receiver_id}
+              ,receive_date = str_to_date(#{receive_date},'%Y-%m-%d %H:%i:%s')
+              ,description = #{description}
+         where 1 = 1
+           and message_id = #{message_id}
+    </update>
+
+    <delete id="deleteMsgTenantChat" parameterType="MsgTenantChat">
+        delete
+          from msg_tenant_chat
+         where 1 = 1
+           and message_id = #{message_id}
+    </delete>
+
+    <select id="selectMsgTenantChatByPk" parameterType="MsgTenantChat" resultType="MsgTenantChat">
+        select message_id
+              ,message_type
+              ,message_content
+              ,message_status
+              ,sender_id
+              ,date_format(send_date,'%Y-%m-%d %H:%i:%s') send_date
+              ,receiver_id
+              ,date_format(receive_date,'%Y-%m-%d %H:%i:%s') receive_date
+              ,description
+          from msg_tenant_chat
+         where 1 = 1
+           and message_id = #{message_id}
+    </select>
+
+</mapper>

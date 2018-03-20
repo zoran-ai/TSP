@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	
+	<!-- 上下文名称 -->
+	<contextName>tsp-api</contextName> 
+	
+	<!-- 控制台输出 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+	
+	<!-- 按天生成日志输出 -->
+	<appender name="ROLLINGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>C:\\tsp\\logs\\/tsp.api.%d{yyyyMMdd}.%i.log</fileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+	
+	<!-- 按天生成调试日志输出 -->
+	<appender name="debugAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>C:\\tsp\\logs\\tsp.api.debug.%d{yyyyMMdd}.%i.log</fileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+	
+	<!-- 按天生成正常日志输出 -->
+	<appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>C:\\tsp\\logs\\tsp.api.info.%d{yyyyMMdd}.%i.log</fileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+	
+	<!-- 按天生成警告日志输出 -->
+	<appender name="warnAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>C:\\tsp\\logs\\tsp.api.warn.%d{yyyyMMdd}.%i.log</fileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+	
+	<!-- 按天生成异常日志输出 -->
+	<appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>C:\\tsp\\logs\\tsp.api.error.%d{yyyyMMdd}.%i.log</fileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+	
+	<logger name="com.chawran" level="ERROR,WARN,INFO,DEBUG">
+		<appender-ref ref="errorAppender" />
+		<appender-ref ref="warnAppender" />
+		<appender-ref ref="infoAppender" />
+		<appender-ref ref="debugAppender" />
+	</logger>
+	
+	<!-- Swagger Log Config -->
+	<logger name="springfox.documentation" level="ERROR" />
+	
+	<!-- Spring Log Config -->
+	<logger name="org.springframework" level="ERROR" />
+	
+	<!-- MyBatis Log Config -->
+	<logger name="dao" level="DEBUG"/>
+	
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="ROLLINGFILE" />
+	</root>
+	
+</configuration>

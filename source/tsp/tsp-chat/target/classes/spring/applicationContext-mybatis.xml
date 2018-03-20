@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.3.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<!-- Druid数据源 -->
+	<bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<!-- 数据库驱动程序 -->
+		<property name="driverClassName" value="${druid.driverClassName}" />
+		<!-- 数据库URL -->
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/tspdb" />
+		<!-- 数据库用户 -->
+		<property name="username" value="tsp" />
+		<!-- 数据库密码 -->
+		<property name="password" value="tsp" />
+		<!-- 初始化连接数 -->
+		<property name="initialSize" value="${druid.initialSize}" />
+		<!-- 最大并发连接数：相当于最大连接数 -->
+		<property name="maxActive" value="${druid.maxActive}" />
+		<!-- 最小空闲连接数：相当于最小连接数 -->
+		<property name="minIdle" value="${druid.minIdle}" />
+		<!-- 最大空闲连接数：为了方便DBCP迁移，不起任何作用 -->
+		<property name="maxIdle" value="${druid.maxIdle}" />
+		<!-- 获取连接等待的最长时间，单位是毫秒 -->
+		<property name="maxWait" value="${druid.maxWait}" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}" />
+        <!-- 用来检测连接是否有效的SQL，要求是一个查询语句-->
+        <property name="validationQuery" value="SELECT 'x'" />
+        <!-- 申请连接的时候检测 -->
+      	<property name="testWhileIdle" value="true" />
+      	<!-- 申请连接时执行validationQuery检测连接是否有效，配置为true会降低性能 -->
+      	<property name="testOnBorrow" value="false" />
+      	<!-- 归还连接时执行validationQuery检测连接是否有效，配置为true会降低性能  -->
+      	<property name="testOnReturn" value="false" />
+      	<!-- 打开PSCache -->
+      	<property name="poolPreparedStatements" value="true" />
+      	<!-- 每个连接上的PCCache的大小 -->
+      	<property name="maxPoolPreparedStatementPerConnectionSize" value="${druid.maxPoolPreparedStatementPerConnectionSize}" />
+      	<!-- 配置监控统计拦截的filters -->
+      	<property name="filters" value="stat" />
+	</bean>
+
+	<!-- MyBatis Session Factory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="druidDataSource" />
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath*:com/chawran/**/mapper/*.xml" />
+	</bean>
+
+	<!-- 事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="druidDataSource" />
+	</bean>
+
+	<!-- 事务切点及通知，事务控制在service层 -->
+	<aop:config>
+		<aop:pointcut id="pointcut" expression="execution(* com.chawran.*..service.*Service.*(..))" />
+		<aop:advisor pointcut-ref="pointcut" advice-ref="txAdvice" />
+	</aop:config>
+
+	<!-- 事务通知、传播属性 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="find*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="query*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="edit*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="save*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="remove*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- SqlSessionTemplate -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+</beans>

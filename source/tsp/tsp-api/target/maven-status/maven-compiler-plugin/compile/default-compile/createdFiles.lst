@@ -1,0 +1,7 @@
+com\chawran\api\swagger\SwaggerApiDocConfig.class
+com\chawran\api\test\dao\TestDao.class
+com\chawran\api\tenant\dao\TenantDao.class
+com\chawran\api\test\controller\TestController.class
+com\chawran\api\tenant\controller\TenantController.class
+com\chawran\api\test\service\TestService.class
+com\chawran\api\tenant\service\TenantService.class

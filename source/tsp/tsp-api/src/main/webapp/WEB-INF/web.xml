@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+
+	<display-name>tsp-api</display-name>
+
+	<!-- WEB应用的根路径 -->
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>tspapi.webapp.root</param-value>
+	</context-param>
+
+	<!-- LogBack配置文件的位置 -->
+	<context-param>
+		<param-name>logbackConfigLocation</param-name>
+		<param-value>classpath:logback/logback.xml</param-value>
+	</context-param>
+	
+	<!-- Spring配置文件的位置，可以指定多个配置文件，用逗号、空格或冒号分隔均可 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:spring/applicationContext.xml
+			classpath:spring/applicationContext-mybatis.xml
+			classpath:spring/applicationContext-websocket.xml
+		</param-value>
+	</context-param>
+	
+	<!-- LogBack监听器，加载LogBack配置文件，完成LogBack的初始化 -->
+	<listener>
+		<listener-class>ch.qos.logback.ext.spring.web.LogbackConfigListener</listener-class>
+	</listener>
+	
+	<!-- 主要用于解决java.beans.Introspector导致的内存泄漏的问题；
+		   会在Web服务器停止时清理Introspector缓存,使那些Javabean能被垃圾回收器正确回收 -->
+	<listener>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
+	
+	<!-- Spring Web 应用上下文监听器 ，实现了ServletContextListener，负责监听WEB容器的启动和关闭事件-->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- Spring Web 请求上下文监听器，实现了ServletRequestListerner，负责监听HTTP请求事件；
+		  用于request、session、globalSession三种Bean作用域的生命周期管理 -->
+	<listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+	
+	<!-- 字符编码过滤器，针对每次HTTP请求进行顾虑，forceEncoding为true时强制覆盖HTTP请求的编码格式  -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- Springmvc的核心Servlet，处理HTTP请求，转发到响应的Controller中处理 -->
+	<servlet>
+		<servlet-name>TspApiDispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/applicationContext-mvc.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TspApiDispatcherServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<!-- Druid监控页面 -->
+	<servlet>
+		<servlet-name>DruidStatView</servlet-name>
+		<servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+		<init-param>
+			<param-name>resetEnable</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>loginUsername</param-name>
+			<param-value>tsp</param-value>
+		</init-param>
+		<init-param>
+			<param-name>loginPassword</param-name>
+			<param-value>tsp</param-value>
+		</init-param>
+		<init-param>
+			<param-name>allow</param-name>
+			<param-value>127.0.0.1</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DruidStatView</servlet-name>
+		<url-pattern>/druid/*</url-pattern>
+	</servlet-mapping>
+
+	<welcome-file-list>
+		<welcome-file>/index.jsp</welcome-file>
+	</welcome-file-list>
+
+</web-app>

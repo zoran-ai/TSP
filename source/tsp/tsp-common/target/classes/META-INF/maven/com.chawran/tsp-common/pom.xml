@@ -1,0 +1,23 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>com.chawran</groupId>
+		<artifactId>tsp</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	
+	<artifactId>tsp-common</artifactId>
+	<name>tsp-common</name>
+	
+	<dependencies>
+		<dependency>
+            <groupId>com.chawran</groupId>
+            <artifactId>tsp-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+	</dependencies>
+	
+</project>

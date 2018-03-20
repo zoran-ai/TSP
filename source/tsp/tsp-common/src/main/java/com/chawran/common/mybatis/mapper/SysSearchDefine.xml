@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chawran.common.mybatis.mapper.SysSearchDefine">
+
+    <insert id="insertSysSearchDefine" parameterType="SysSearchDefine">
+        insert into sys_search_define
+       (search_code
+       ,search_name
+       ,description)
+        values
+       (#{search_code}
+       ,#{search_name}
+       ,#{description})
+    </insert>
+
+    <update id="updateSysSearchDefine" parameterType="SysSearchDefine">
+        update sys_search_define
+           set search_code = #{search_code}
+              ,search_name = #{search_name}
+              ,description = #{description}
+         where 1 = 1
+           and search_code = #{search_code}
+    </update>
+
+    <delete id="deleteSysSearchDefine" parameterType="SysSearchDefine">
+        delete
+          from sys_search_define
+         where 1 = 1
+           and search_code = #{search_code}
+    </delete>
+
+    <select id="selectSysSearchDefineByPk" parameterType="SysSearchDefine" resultType="SysSearchDefine">
+        select search_code
+              ,search_name
+              ,description
+          from sys_search_define
+         where 1 = 1
+           and search_code = #{search_code}
+    </select>
+
+</mapper>
